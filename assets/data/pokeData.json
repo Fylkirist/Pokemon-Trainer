@@ -1,0 +1,104 @@
+{
+    "pokemon": [
+      {
+        "name": "Pikachu",
+        "possibleMoves": {
+          "Thunder Shock": 1,
+          "Tail Whip": 1,
+          "Thunder Wave": 7,
+          "Double Team": 15,
+          "Slam": 23,
+          "Thunderbolt": 31,
+          "Agility": 39,
+          "Thunder": 47
+        },
+        "stats": {
+          "hp": 35,
+          "attack": 55,
+          "defense": 30,
+          "sp_attack": 50,
+          "sp_defense": 40,
+          "speed": 90
+        },
+        "statGrowth": {
+          "hp": 0.5,
+          "attack": 1,
+          "defense": 0.5,
+          "sp_attack": 1,
+          "sp_defense": 0.5,
+          "speed": 2
+        },
+        "ability": {
+          "name": "Static",
+          "description": "The opponent has a 30% chance of being induced with PARALYZE when using an attack, that requires physical contact, against this Pokémon."
+        }
+      },
+      {
+        "name": "Charmander",
+        "possibleMoves": {
+          "Scratch": 1,
+          "Growl": 1,
+          "Ember": 7,
+          "Smokescreen": 15,
+          "Dragon Rage": 23,
+          "Scary Face": 31,
+          "Fire Fang": 39,
+          "Flame Burst": 47
+        },
+        "stats": {
+          "hp": 39,
+          "attack": 52,
+          "defense": 43,
+          "sp_attack": 60,
+          "sp_defense": 50,
+          "speed": 65
+        },
+        "statGrowth": {
+          "hp": 0.5,
+          "attack": 1,
+          "defense": 0.5,
+          "sp_attack": 1,
+          "sp_defense": 0.5,
+          "speed": 2
+        },
+        "ability": {
+          "name": "Blaze",
+          "description": "When HP is below 1/3rd its maximum, power of Fire-type moves is increased by 50%."
+        }
+    },
+    {
+        "name": "Bulbasaur",
+        "possibleMoves": {
+          "Tackle": 1,
+          "Growl": 1,
+          "Leech Seed": 7,
+          "Vine Whip": 15,
+          "Poison Powder": 23,
+          "Razor Leaf": 31,
+          "Growth": 39,
+          "Solar Beam": 47
+          },
+          "stats": {
+          "hp": 45,
+          "attack": 49,
+          "defense": 49,
+          "sp_attack": 65,
+          "sp_defense": 65,
+          "speed": 45
+          },
+          "statGrowth": {
+          "hp": 0.5,
+          "attack": 0.5,
+          "defense": 0.5,
+          "sp_attack": 1,
+          "sp_defense": 1,
+          "speed": 0.5
+          },
+          "ability": {
+          "name": "Overgrow",
+          "description": "When HP is below 1/3rd its maximum, power of Grass-type moves is increased by 50%."
+          }
+        }
+    ]
+}
+            
