@@ -75,7 +75,11 @@ function renderBattle(battleState){
 }
 
 function openMoveMenu(moves){
-    
+    let buffer;
+    moves.forEach(move => {
+        buffer+=`<div id="${move.name}" class="battleMoveList">${move.name}</div>` 
+    });
+    document.getElementById("infobar").innerHTML=buffer
 }
 
 function animateWalkCycle(pState,map){
