@@ -139,8 +139,11 @@ var testBattleState = new battleState({
     flags:{}
 })
 
-function generateBattleState(pState,mState){
+function generateBattleState(pState,eState,type){
     return new battleState({
-        
+        encounterType:type,
+        playerParty:pState.party,
+        enemyParty:eState,
+        flags:{}
     });
 }

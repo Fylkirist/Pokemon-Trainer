@@ -74,12 +74,11 @@ function renderBattle(battleState){
 }
 
 function renderBattleMenu(battleState){
-    
-    document.getElementById("menuHead")=`
-        <div id = "fightOption">Fight</div>
-        <div id = "itemsOption">Items</div>
-        <div id = "partyOption">PKMN</div>
-        <div id = "fleeOption">Flee</div>`
+    document.getElementById("menuHead").innerHTML=`
+        <div onclick="openFightMenu(${battleState})"class="battleMenuOption" id = "fightOption">Fight</div>
+        <div onclick="openItemsMenu()"class="battleMenuOption" id = "itemsOption">Items</div>
+        <div onclick="openPartyMenu(${battleState})" class="battleMenuOption" id = "partyOption">PKMN</div>
+        <div onclick="fleeBattle()" class="battleMenuOption" id = "fleeOption">Flee</div>`
 }
 
 function animateWalkCycle(pState,map){

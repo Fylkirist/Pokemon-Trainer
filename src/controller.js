@@ -15,8 +15,16 @@ test.addEventListener("click",()=>{
     })
 })
 
-function startBattle(){
-    
+function startWildBattle(){
+    currentBattleState = new battleState({
+        encounterType:"wild",
+        playerParty:playerState.party,
+        enemyParty:[currentMap.encounters[Math.floor(Math.random()*currentMap.encounters.length)]],
+        flags:{}
+    });
+    battleFlag=true
+    renderBattle(currentBattleState)
+
 }
 
 function movePlayer(event){
@@ -24,11 +32,7 @@ function movePlayer(event){
     playerState.moveChar(event)
     animateWalkCycle(playerState,currentMap.map)
     if(Math.random()>currentMap.map[playerState.position[0]][playerState.position[1]].encounter){
-        battleFlag = true
-        renderBattle(testBattleState)
-        document.addEventListener("keydown",function(event){
-            
-        })
+        startWildBattle();
     }
 }
 
