@@ -63,23 +63,23 @@ function renderBattle(battleState){
         <div id = "playerSpriteContainer">
             <img src = "${battleState.playerParty[battleState.playerCurrentActive].sprite.away}"/>
         </div>
-        <div id = "infoBar">
+        <div id = "menuContainer">
+            <div id = "infoBar">
+            </div>
             <div id = "menuHead">
-                <div id = "fightOption">Fight</div>
-                <div id = "itemsOption">Items</div>
-                <div id = "partyOption">PKMN</div>
-                <div id = "fleeOption">Flee</div>
             </div>
         </div>
     </div>`
+    renderBattleMenu(battleState)
 }
 
-function openMoveMenu(moves){
-    let buffer;
-    moves.forEach(move => {
-        buffer+=`<div id="${move.name}" class="battleMoveList">${move.name}</div>` 
-    });
-    document.getElementById("infobar").innerHTML=buffer
+function renderBattleMenu(battleState){
+    
+    document.getElementById("menuHead")=`
+        <div id = "fightOption">Fight</div>
+        <div id = "itemsOption">Items</div>
+        <div id = "partyOption">PKMN</div>
+        <div id = "fleeOption">Flee</div>`
 }
 
 function animateWalkCycle(pState,map){

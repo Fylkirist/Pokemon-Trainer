@@ -15,6 +15,10 @@ test.addEventListener("click",()=>{
     })
 })
 
+function startBattle(){
+    
+}
+
 function movePlayer(event){
     console.log(event)
     playerState.moveChar(event)
