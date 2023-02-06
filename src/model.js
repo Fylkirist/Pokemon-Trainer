@@ -1,10 +1,36 @@
-let playerFlags = {};;
+let playerFlags = {};
 
 let playerPosition = [0,0,0]
 
 var animFlag = false
 
 var battleFlag = false
+
+async function getPkmnData(){
+    let data = await fetch("/assets/data/pokeData.json")
+    return data.json()
+}
+
+async function calculateInitialStats(species,level){
+    let pkmnData = await getPkmnData()
+    let statsObject= pkmnData[species].baseStats
+    console.log(pkmnData)
+    for(i=0;i<level;i++){
+        statsObject.hp+=pkmnData[species].statGrowth.hp
+        statsObject.attack+=pkmnData[species].statGrowth.attack
+        statsObject.spAttack+=pkmnData[species].statGrowth.spAttack
+        statsObject.defense+=pkmnData[species].statGrowth.defense
+        statsObject.spDefense+=pkmnData[species].statGrowth.spDefense
+        statsObject.speed+=pkmnData[species].statGrowth.speed
+    }
+    return statsObject
+}
+
+async function getSprite(species){
+    let pkmnData = await getPkmnData();
+    console.log(pkmnData[species].sprite)
+    return pkmnData[species].sprite
+}
 
 class tile{
     constructor(properties){
@@ -71,19 +97,12 @@ class pokemon{
         this.moves = properties.moves
         this.ability =  properties.ability
         this.name = properties.name
-        this.stats = properties.stats
-        this.statGrowth = properties.statGrowth
+        this.species = properties.species
+        this.stats = calculateInitialStats(properties.species,properties.level)
         this.status = false
         this.experience = 0
-        this.sprite = properties.sprite
+        this.sprite = getSprite(properties.species)
     }
-    levelUp(){
-        Object.keys(this.stats).forEach((k)=>{
-            this.stats[k]+=this.statGrowth[k]
-        })
-        this.experience-=this.level*1000
-    }
-
 }
 const grassTile = new tile({type:"grassTile",facing:"south",occupied:"",encounter:0.90})
 
@@ -91,20 +110,14 @@ const testPkmn = new pokemon({
     name:"Pikachu",
     level:50,
     moves:["Thunder","Thunderbolt","Slam","Thunder Shock"],
-    stats:{currentHealth:100,maxHealth:100,attack:10,spAttack:10,defense:10,spDefense:10,speed:10,avoid:100},
-    ability:"",
-    statGrowth:{currentHealth:10,maxHealth:10,attack:1,spAttack:1,defense:1,spDefense:1,speed:1,avoid:0},
-    sprite:{away:"./assets/sprites/Pikachu.png",towards:"./assets/sprites/Pikachu.png"}
+    species:"pikachu"
 })
 
 const testPkmn2 = new pokemon({
     name:"Pikachu",
     level:50,
     moves:["Thunder","Thunderbolt","Slam","Thunder Shock"],
-    stats:{currentHealth:100,maxHealth:100,attack:10,spAttack:10,defense:10,spDefense:10,speed:10,avoid:100},
-    ability:"",
-    statGrowth:{currentHealth:10,maxHealth:10,attack:1,spAttack:1,defense:1,spDefense:1,speed:1,avoid:0},
-    sprite:{away:"./assets/sprites/Pikachu.png",towards:"./assets/sprites/Pikachu.png"}
+    species:"pikachu"
 })
 
 var currentMap = new mapState({map:[
@@ -128,19 +141,3 @@ var currentMap = new mapState({map:[
 ],encounters:[testPkmn2]})
 
 var playerState = new state({position:playerPosition,party:[testPkmn],flags:playerFlags,items:[]});
-
-var testBattleState = new battleState({
-    encounterType:"wild",
-    playerParty:playerState.party,
-    enemyParty:[testPkmn2],
-    flags:{}
-})
-
-function generateBattleState(pState,eState,type){
-    return new battleState({
-        encounterType:type,
-        playerParty:pState.party,
-        enemyParty:eState,
-        flags:{}
-    });
-}

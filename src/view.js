@@ -59,7 +59,7 @@ function renderBattle(bState,pState){
             <label>${bState.playerParty[bState.playerCurrentActive].stats.currentHealth}/${bState.playerParty[bState.playerCurrentActive].stats.maxHealth}</label>
         </div>
         <div id = "playerSpriteContainer">
-            <img src = "${bState.playerParty[bState.playerCurrentActive].sprite.away}"/>
+            <img src = "${pState.playerParty[bState.playerCurrentActive].sprite.away}"/>
         </div>
         <div id = "menuContainer">
             <div id = "infoBar">
