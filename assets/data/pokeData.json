@@ -1,5 +1,7 @@
-{
-  "pikachu": {
+[
+  {
+    "name":"Pikachu",
+    "type":"electric",
     "baseStats": {
       "currentHealth": 100,
       "maxHealth": 100,
@@ -18,15 +20,16 @@
       "spAttack": 1,
       "defense": 1,
       "spDefense": 1,
-      "speed": 1,
-      "avoid": 0
+      "speed": 1
     },
     "sprite": {
       "away": "./assets/sprites/Pikachu.png",
       "towards": "./assets/sprites/Pikachu.png"
     }
   },
-  "charmander": {
+  {
+    "name":"Charmander",
+    "type":"fire",
     "baseStats": {
       "currentHealth": 90,
       "maxHealth": 90,
@@ -45,15 +48,16 @@
       "spAttack": 2,
       "defense": 2,
       "spDefense": 2,
-      "speed": 2,
-      "avoid": 0
+      "speed": 2
     },
     "sprite": {
       "away": "./assets/sprites/Charmander.png",
       "towards": "./assets/sprites/Charmander.png"
     }
   },
-  "bulbasaur": {
+  {
+    "name":"Bulbasaur",
+    "type":"grass",
     "baseStats": {
       "currentHealth": 110,
       "maxHealth": 110,
@@ -72,12 +76,11 @@
       "spAttack": 1,
       "defense": 1,
       "spDefense": 1,
-      "speed": 1,
-      "avoid": 0
+      "speed": 1
     },
     "sprite": {
       "away": "./assets/sprites/Bulbasaur.png",
       "towards": "./assets/sprites/Bulbasaur.png"
     }
   }
-}
+]

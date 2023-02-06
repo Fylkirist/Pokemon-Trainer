@@ -1,8 +1,18 @@
 const test = document.getElementById("testButton")
 
-initializeDisplay()
+var animFlag = false
+
+var currentBattleState;
 
 test.addEventListener("click",()=>{
+    currentMap = new mapState(mapData[0])
+    testPkmn = new pokemon({
+        name:"Pikachu",
+        level:50,
+        moves:["Thunder","Thunderbolt","Slam","Thunder Shock"],
+        species:0
+    })
+    playerState = new state({position:playerPosition,party:[testPkmn],flags:playerFlags,items:[]});
     drawGrid(currentMap.map,playerState)
     document.addEventListener("keydown", function(event){
     if (animFlag || battleFlag){
@@ -18,12 +28,11 @@ test.addEventListener("click",()=>{
 function startWildBattle(){
     currentBattleState = new battleState({
         encounterType:"wild",
-        playerParty:playerState.party,
-        enemyParty:[currentMap.encounters[Math.floor(Math.random()*currentMap.encounters.length)]],
+        enemyParty:[new pokemon(currentMap.encounters[Math.floor(Math.random()*currentMap.encounters.length)])],
         flags:{}
     });
     battleFlag=true
-    renderBattle(currentBattleState)
+    renderBattle(currentBattleState,playerState)
 }
 
 function openFightMenu(){

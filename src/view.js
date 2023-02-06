@@ -1,5 +1,7 @@
 var app = document.getElementById("app")
 
+initializeDisplay()
+
 function initializeDisplay(){
     app.innerHTML = `<div id = "gameWindow"><div id="playerSpriteContainer"></div></div>`
 }
@@ -38,7 +40,7 @@ function renderBattle(bState,pState){
 
     let enemyCurrentHealthBar = (bState.enemyParty[bState.enemyCurrentActive].stats.currentHealth / bState.enemyParty[bState.enemyCurrentActive].stats.maxHealth) * 100
 
-    let playerCurrentHealthBar = (bState.playerParty[bState.playerCurrentActive].stats.currentHealth / bState.playerParty[bState.playerCurrentActive].stats.maxHealth) * 100
+    let playerCurrentHealthBar = (pState.party[bState.playerCurrentActive].stats.currentHealth / pState.party[bState.playerCurrentActive].stats.maxHealth) * 100
 
     document.getElementById("gameWindow").innerHTML=`
     <div id = "battleBackground">
@@ -51,15 +53,15 @@ function renderBattle(bState,pState){
             <img src = "${bState.enemyParty[bState.enemyCurrentActive].sprite.towards}"/>
         </div>
         <div id = "playerInfoContainer">
-            <label>${bState.playerParty[bState.playerCurrentActive].name}</label>
-            <label>lvl ${bState.playerParty[bState.playerCurrentActive].level}</label>
+            <label>${pState.party[bState.playerCurrentActive].name}</label>
+            <label>lvl ${pState.party[bState.playerCurrentActive].level}</label>
             <div id = "playerHealthBarContainer">
                 <div id="playerHealthBar" style="width:${playerCurrentHealthBar}px; height:10px; background:green;"></div>
             </div>
-            <label>${bState.playerParty[bState.playerCurrentActive].stats.currentHealth}/${bState.playerParty[bState.playerCurrentActive].stats.maxHealth}</label>
+            <label>${pState.party[bState.playerCurrentActive].stats.currentHealth}/${pState.party[bState.playerCurrentActive].stats.maxHealth}</label>
         </div>
         <div id = "playerSpriteContainer">
-            <img src = "${pState.playerParty[bState.playerCurrentActive].sprite.away}"/>
+            <img src = "${pState.party[bState.playerCurrentActive].sprite.away}"/>
         </div>
         <div id = "menuContainer">
             <div id = "infoBar">
@@ -77,8 +79,8 @@ function renderBattle(bState,pState){
     }
     else if(bState.menu=="fight"){
         const infoBar = document.getElementById("infoBar")
-        for(i=0;i<bState.playerParty[bState.playerCurrentActive].moves.length;i++){
-            infoBar.innerHTML+=`<div onclick="selectMove(${bState.playerParty[bState.playerCurrentActive].moves[i]})" class="battleMenuOption">${bState.playerParty[bState.playerCurrentActive].moves[i]}</div>`
+        for(i=0;i<pState.party[bState.playerCurrentActive].moves.length;i++){
+            infoBar.innerHTML+=`<div onclick="selectMove(${pState.party[bState.playerCurrentActive].moves[i]})" class="battleMenuOption">${pState.party[bState.playerCurrentActive].moves[i]}</div>`
             }
         infoBar.innerHTML+=`<div class="battleMenuOption" onclick="mainBattleMenu()">Back</div>`
     }

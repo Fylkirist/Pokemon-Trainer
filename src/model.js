@@ -2,17 +2,24 @@ let playerFlags = {};
 
 let playerPosition = [0,0,0]
 
-var animFlag = false
+
 
 var battleFlag = false
+var mapData;
+var pkmnData;
+getPkmnData()
+
 
 async function getPkmnData(){
-    let data = await fetch("/assets/data/pokeData.json")
-    return data.json()
+    let data =  await fetch("/assets/data/pokeData.json")
+    data = await data.json()
+    let maps = await fetch("/assets/data/maps.json")
+    maps = await maps.json()
+    pkmnData = data
+    mapData = maps
 }
 
-async function calculateInitialStats(species,level){
-    let pkmnData = await getPkmnData()
+function calculateInitialStats(species,level){
     let statsObject= pkmnData[species].baseStats
     console.log(pkmnData)
     for(i=0;i<level;i++){
@@ -26,9 +33,7 @@ async function calculateInitialStats(species,level){
     return statsObject
 }
 
-async function getSprite(species){
-    let pkmnData = await getPkmnData();
-    console.log(pkmnData[species].sprite)
+function getSprite(species){
     return pkmnData[species].sprite
 }
 
@@ -93,6 +98,7 @@ class mapState{
 
 class pokemon{
     constructor(properties){
+        console.log(pkmnData)
         this.level = properties.level
         this.moves = properties.moves
         this.ability =  properties.ability
@@ -101,43 +107,16 @@ class pokemon{
         this.stats = calculateInitialStats(properties.species,properties.level)
         this.status = false
         this.experience = 0
-        this.sprite = getSprite(properties.species)
+        this.sprite = pkmnData[properties.species].sprite
+        this.type = pkmnData[properties.species].type
     }
 }
 const grassTile = new tile({type:"grassTile",facing:"south",occupied:"",encounter:0.90})
 
-const testPkmn = new pokemon({
-    name:"Pikachu",
-    level:50,
-    moves:["Thunder","Thunderbolt","Slam","Thunder Shock"],
-    species:"pikachu"
-})
+var testPkmn;
 
-const testPkmn2 = new pokemon({
-    name:"Pikachu",
-    level:50,
-    moves:["Thunder","Thunderbolt","Slam","Thunder Shock"],
-    species:"pikachu"
-})
+var testPkmn2;
 
-var currentMap = new mapState({map:[
-    [{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90}],
-    [{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90}],
-    [{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90}],
-    [{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90}],
-    [{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90}],
-    [{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90}],
-    [{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90}],
-    [{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90}],
-    [{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90}],
-    [{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90}],
-    [{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90}],
-    [{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90}],
-    [{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90}],
-    [{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90}],
-    [{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90}],
-    [{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90}],
-    [{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90},{type:"grassTile",facing:"south",occupied:"",encounter:0.90}]
-],encounters:[testPkmn2]})
+var currentMap;
 
-var playerState = new state({position:playerPosition,party:[testPkmn],flags:playerFlags,items:[]});
+var playerState; 
