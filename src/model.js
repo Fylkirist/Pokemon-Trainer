@@ -23,9 +23,7 @@ class battleState{
         this.playerParty = properties.playerParty
         this.enemyParty = properties.enemyParty
         this.flags = properties.flags
-    }
-    useMove(move,target){
-
+        this.menu = "main"
     }
 }
 
@@ -71,7 +69,6 @@ class pokemon{
     constructor(properties){
         this.level = properties.level
         this.moves = properties.moves
-        this.possibleMoves = properties.possibleMoves
         this.ability =  properties.ability
         this.name = properties.name
         this.stats = properties.stats

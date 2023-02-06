@@ -34,34 +34,32 @@ function drawGrid(mapGrid,pState){
 
 }
 
-function renderBattle(battleState){
+function renderBattle(bState,pState){
 
-    console.log(battleState.enemyParty[battleState.enemyCurrentActive])
+    let enemyCurrentHealthBar = (bState.enemyParty[bState.enemyCurrentActive].stats.currentHealth / bState.enemyParty[bState.enemyCurrentActive].stats.maxHealth) * 100
 
-    let enemyCurrentHealthBar = (battleState.enemyParty[battleState.enemyCurrentActive].stats.currentHealth / battleState.enemyParty[battleState.enemyCurrentActive].stats.maxHealth) * 100
-
-    let playerCurrentHealthBar = (battleState.playerParty[battleState.playerCurrentActive].stats.currentHealth / battleState.playerParty[battleState.playerCurrentActive].stats.maxHealth) * 100
+    let playerCurrentHealthBar = (bState.playerParty[bState.playerCurrentActive].stats.currentHealth / bState.playerParty[bState.playerCurrentActive].stats.maxHealth) * 100
 
     document.getElementById("gameWindow").innerHTML=`
     <div id = "battleBackground">
         <div id = "enemyInfoContainer">
-            <label>${battleState.enemyParty[battleState.enemyCurrentActive].name}</label>
-            <label>lvl ${battleState.enemyParty[battleState.enemyCurrentActive].level}</label>
+            <label>${bState.enemyParty[bState.enemyCurrentActive].name}</label>
+            <label>lvl ${bState.enemyParty[bState.enemyCurrentActive].level}</label>
             <div id = "enemyHealthBarContainer"><div id = "enemyHealthBar" style = "width:${enemyCurrentHealthBar}px; height:10px; background:green;"></div></div>
         </div>
         <div id = "enemySpriteContainer">
-            <img src = "${battleState.enemyParty[battleState.enemyCurrentActive].sprite.towards}"/>
+            <img src = "${bState.enemyParty[bState.enemyCurrentActive].sprite.towards}"/>
         </div>
         <div id = "playerInfoContainer">
-            <label>${battleState.playerParty[battleState.playerCurrentActive].name}</label>
-            <label>lvl ${battleState.playerParty[battleState.playerCurrentActive].level}</label>
+            <label>${bState.playerParty[bState.playerCurrentActive].name}</label>
+            <label>lvl ${bState.playerParty[bState.playerCurrentActive].level}</label>
             <div id = "playerHealthBarContainer">
                 <div id="playerHealthBar" style="width:${playerCurrentHealthBar}px; height:10px; background:green;"></div>
             </div>
-            <label>${battleState.playerParty[battleState.playerCurrentActive].stats.currentHealth}/${battleState.playerParty[battleState.playerCurrentActive].stats.maxHealth}</label>
+            <label>${bState.playerParty[bState.playerCurrentActive].stats.currentHealth}/${bState.playerParty[bState.playerCurrentActive].stats.maxHealth}</label>
         </div>
         <div id = "playerSpriteContainer">
-            <img src = "${battleState.playerParty[battleState.playerCurrentActive].sprite.away}"/>
+            <img src = "${bState.playerParty[bState.playerCurrentActive].sprite.away}"/>
         </div>
         <div id = "menuContainer">
             <div id = "infoBar">
@@ -70,16 +68,36 @@ function renderBattle(battleState){
             </div>
         </div>
     </div>`
-    renderBattleMenu(battleState)
+    if(bState.menu=="main"){
+        document.getElementById("menuHead").innerHTML=`
+            <div onclick="openFightMenu()"class="battleMenuOption" id = "fightOption">Fight</div>
+            <div onclick="openItemsMenu()"class="battleMenuOption" id = "itemsOption">Items</div>
+            <div onclick="openPartyMenu()" class="battleMenuOption" id = "partyOption">PKMN</div>
+            <div onclick="fleeBattle()" class="battleMenuOption" id = "fleeOption">Flee</div>`
+    }
+    else if(bState.menu=="fight"){
+        const infoBar = document.getElementById("infoBar")
+        for(i=0;i<bState.playerParty[bState.playerCurrentActive].moves.length;i++){
+            infoBar.innerHTML+=`<div onclick="selectMove(${bState.playerParty[bState.playerCurrentActive].moves[i]})" class="battleMenuOption">${bState.playerParty[bState.playerCurrentActive].moves[i]}</div>`
+            }
+        infoBar.innerHTML+=`<div class="battleMenuOption" onclick="mainBattleMenu()">Back</div>`
+    }
+    else if(bState.menu=="items"){
+        for(i=0;i<pState.items.length;i++){
+            
+        }
+    }
 }
 
-function renderBattleMenu(battleState){
-    document.getElementById("menuHead").innerHTML=`
-        <div onclick="openFightMenu(${battleState})"class="battleMenuOption" id = "fightOption">Fight</div>
-        <div onclick="openItemsMenu()"class="battleMenuOption" id = "itemsOption">Items</div>
-        <div onclick="openPartyMenu(${battleState})" class="battleMenuOption" id = "partyOption">PKMN</div>
-        <div onclick="fleeBattle()" class="battleMenuOption" id = "fleeOption">Flee</div>`
+function renderBattlePartyMenu(bState){
+    const gameWindow = document.getElementById("gameWindow")
+    gameWindow.innerHTML=`<div id="partyMenuBG"></div>`
+    for(i=0;i<bState.playerParty.length;i++){
+        
+    }
 }
+
+
 
 function animateWalkCycle(pState,map){
     const background = document.getElementById("backgroundLayer");

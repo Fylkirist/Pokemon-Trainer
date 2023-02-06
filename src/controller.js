@@ -24,6 +24,23 @@ function startWildBattle(){
     });
     battleFlag=true
     renderBattle(currentBattleState)
+}
+
+function openFightMenu(){
+    currentBattleState.menu="fight"
+    renderBattle(currentBattleState,playerState)
+}
+
+function mainBattleMenu(){
+    currentBattleState.menu="main"
+    renderBattle(currentBattleState,playerState)
+}
+
+function selectMove(move){
+    
+}
+
+function selectItem(item){
 
 }
 
