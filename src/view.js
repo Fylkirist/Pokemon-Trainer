@@ -74,7 +74,7 @@ function renderBattle(bState,pState){
         document.getElementById("menuHead").innerHTML=`
             <div onclick="openFightMenu()"class="battleMenuOption" id = "fightOption">Fight</div>
             <div onclick="openItemsMenu()"class="battleMenuOption" id = "itemsOption">Items</div>
-            <div onclick="openPartyMenu()" class="battleMenuOption" id = "partyOption">PKMN</div>
+            <div onclick="openPartyMenu(false)" class="battleMenuOption" id = "partyOption">PKMN</div>
             <div onclick="fleeBattle()" class="battleMenuOption" id = "fleeOption">Flee</div>`
     }
     else if(bState.menu=="fight"){
