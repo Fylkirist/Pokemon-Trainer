@@ -19,6 +19,7 @@ const typeRelationships = {
     "dark": { weakTo: ["fighting", "bug", "fairy"], strongAgainst: ["psychic", "ghost"] },
     "steel": { weakTo: ["fire", "water", "electric", "steel"], strongAgainst: ["ice", "rock", "fairy"] },
     "fairy": { weakTo: ["steel", "poison"], strongAgainst: ["fighting", "dragon", "dark"] },
+    "electric":{weakTo:["ground","grass","dragon"],strongAgainst: ["flying","water"]}
   };
   
 var moveDict = {"Thunder":{type:"electric",power:120,category:"special",accuracy:80,effect:["paralyze",0.10]},"Thunderbolt":{type:"electric",power:80,category:"special",accuracy:100,effect:["paralyze",0.10]},"Slam":{type:"normal",power:80,category:"physical",accuracy:100,effect:["none",0]},"Thunder Shock":{type:"electric",power:60,category:"special",accuracy:500,effect:["paralyze",0.30]}}

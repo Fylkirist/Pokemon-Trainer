@@ -80,7 +80,7 @@ function renderBattle(bState,pState){
     else if(bState.menu=="fight"){
         const infoBar = document.getElementById("infoBar")
         for(i=0;i<pState.party[bState.playerCurrentActive].moves.length;i++){
-            infoBar.innerHTML+=`<div onclick="selectMove(${pState.party[bState.playerCurrentActive].moves[i]})" class="battleMenuOption">${pState.party[bState.playerCurrentActive].moves[i]}</div>`
+            infoBar.innerHTML+=`<div onclick="selectMove('${pState.party[bState.playerCurrentActive].moves[i]}')" class="battleMenuOption">${pState.party[bState.playerCurrentActive].moves[i]}</div>`
             }
         infoBar.innerHTML+=`<div class="battleMenuOption" onclick="mainBattleMenu()">Back</div>`
     }

@@ -46,7 +46,8 @@ function mainBattleMenu(){
 }
 
 function selectMove(move){
-    
+    console.log(move)
+    handleBattleLogic("move",moveDict[move])
 }
 
 function selectItem(item){
@@ -57,81 +58,91 @@ function selectEnemyAction(){
     return currentBattleState.enemyParty[currentBattleState.enemyCurrentActive].moves[Math.floor(Math.random()*currentBattleState.enemyParty[currentBattleState.enemyCurrentActive].moves.length)]
 }
 
-function calculateDamage(attacker,move,defender,flags){
-    let miss = 100-moveDict[move].accuracy
-    if(miss>Math.floor(Math.random()*100)){
-        return [0,0]
+function calculateDamage(attacker, move, defender, flags) {
+    let miss = 100 - move.accuracy;
+    if (miss > Math.floor(Math.random() * 100)) {
+        return [0, 0];
     }
-    let dmgMod = 1
+    
     let damage;
-    if (move.category == "physical"){
-        damage = (((((2*attacker.level)/5)+2)*move.power*(attacker.stats.attack/defender.stats.defense))/50+2)
-    }
-    else{
-        damage = (((((2*attacker.level)/5)+2)*move.power*(attacker.stats.spAttack/defender.stats.spDefense))/50+2)
-    }
-        
-    damage = attacker.type == move.type ? damage*1.5:damage
+    let damageModifier = 1;
+    let attackerStat = move.category === "physical" ? "attack" : "spAttack";
+    let defenderStat = move.category === "physical" ? "defense" : "spDefense";
+    
+    damage = (((((2 * attacker.level) / 5) + 2) * move.power * (attacker.stats[attackerStat] / defender.stats[defenderStat])) / 50 + 2);
+    damage = attacker.type === move.type ? damage * 1.5 : damage;
 
-    if(typeRelationships[defender.type].weakTo.includes(move.type)){
-        damage*=2
-        dmgMod*=2
+    let defenderType = typeRelationships[defender.type];
+    if (defenderType.weakTo.includes(move.type)) {
+        damage *= 2;
+        damageModifier *= 2;
+    } else if (defenderType.strongAgainst.includes(move.type)) {
+        damage *= 0.5;
+        damageModifier *= 0.5;
     }
-    else if(typeRelationships[defender.type].strongAgainst.includes(move.type)){
-        damage*=0.5
-        dmgMod*=0.5
-    }
-    return[damage,dmgMod]
-
+    return [Math.ceil(damage), damageModifier];
 }
 
-function handleBattleLogic(actionType,playerAction){
-    let pSpeed = playerState[currentBattleState.playerCurrentActive].stats.speed
-    let eSpeed = currentBattleState.enemyParty[currentBattleState.enemyCurrentActive].stats.speed
-    let playerFainted = false
-    let eAction = moveDict[selectEnemyAction()]
-    if(actionType=="flee"){
-        if(currentBattleState.type=="wild"){
+
+
+
+function handleBattleLogic(actionType, playerAction) {
+    let player = playerState.party[currentBattleState.playerCurrentActive];
+    let enemy = currentBattleState.enemyParty[currentBattleState.enemyCurrentActive];
+    let enemyAction = moveDict[selectEnemyAction()];
+
+    if (actionType === "flee") {
+        if (currentBattleState.type === "wild") {
             fleeBattle();
-            return
+            return;
         }
     }
-    let enemyDamage = calculateDamage(currentBattleState.enemyParty[currentBattleState.enemyCurrentActive],eAction,playerState.party[currentBattleState.playerCurrentActive])
-    if(actionType=="move"){
-        let playerDamage = calculateDamage(playerState.party[currentBattleState.playerCurrentActive],playerAction,currentBattleState.enemyParty[currentBattleState.enemyCurrentActive])
-        if(eSpeed>pSpeed){   
-            if(playerState.party[currentBattleState.playerCurrentActive].stats.currentHealth-enemyDamage[0]<=0){
-                playerState.party[currentBattleState.playerCurrentActive].stats.currentHealth=0
-                playerFainted = true;
-                console.log(`${currentBattleState.enemyParty[currentBattleState.enemyCurrentActive].name} hit ${playerState.party[currentBattleState.playerCurrentActive].name} with ${eAction} for ${enemyDamage[0]} at ${enemyDamage[1]} effectiveness`)
-            }
-            else{
-                playerState.party[currentBattleState.playerCurrentActive].stats.currentHealth-=enemyDamage[0]
-                console.log(`${currentBattleState.enemyParty[currentBattleState.enemyCurrentActive].name} hit ${playerState.party[currentBattleState.playerCurrentActive].name} with ${eAction} for ${enemyDamage[0]} at ${enemyDamage[1]} effectiveness`)
-            }
-        }
-        else{
-            if(playerState.party[currentBattleState.playerCurrentActive].stats.currentHealth-enemyDamage[0]<=0){
-                playerState.party[currentBattleState.playerCurrentActive].stats.currentHealth=0
-                playerFainted = true;
-                console.log(`${currentBattleState.enemyParty[currentBattleState.enemyCurrentActive].name} hit ${playerState.party[currentBattleState.playerCurrentActive].name} with ${eAction} for ${enemyDamage[0]} at ${enemyDamage[1]} effectiveness`)
-            }
-            else{
-                playerState.party[currentBattleState.playerCurrentActive].stats.currentHealth-=enemyDamage[0]
-                console.log(`${currentBattleState.enemyParty[currentBattleState.enemyCurrentActive].name} hit ${playerState.party[currentBattleState.playerCurrentActive].name} with ${eAction} for ${enemyDamage[0]} at ${enemyDamage[1]} effectiveness`)
-            }
-        }
-    }
-    else{
-        if(playerState.party[currentBattleState.playerCurrentActive].stats.currentHealth-enemyDamage[0]<=0){
-            playerState.party[currentBattleState.playerCurrentActive].stats.currentHealth=0
-            playerFainted = true;
-        }
-        else{
 
+    let enemyDamage = calculateDamage(enemy, enemyAction, player);
+    let playerDamage = calculateDamage(player, playerAction, enemy);
+
+    if (enemy.stats.speed > player.stats.speed) {
+        handleHit(player, enemy, enemyAction, enemyDamage);
+        if (enemy.stats.currentHealth <= 0) {
+            handleFaint(enemy);
+        } 
+        else{
+            handleHit(enemy, player, playerAction, playerDamage);
+            if (player.stats.currentHealth <= 0) {
+                handleFaint(player);
+            }
+        }
+    } 
+    else{
+        handleHit(enemy, player, playerAction, playerDamage);
+        if (enemy.stats.currentHealth <= 0) {
+            handleFaint(enemy);
+        } 
+        else{
+            handleHit(player, enemy, enemyAction, enemyDamage);
+            if (player.stats.currentHealth <= 0) {
+                handleFaint(player);
+            }
         }
     }
+    renderBattle(currentBattleState,playerState)
 }
+
+function handleHit(attacker, defender, action, damage) {
+    if (defender.stats.currentHealth - damage[0] <= 0) {
+        defender.stats.currentHealth = 0;
+        handleFaint(defender);
+    } else {
+        defender.stats.currentHealth -= damage[0];
+    }
+    console.log(`${attacker.name} hit ${defender.name} with ${action} for ${damage[0]} at ${damage[1]} effectiveness`);
+}
+
+function handleFaint(faintedPokemon) {
+    faintedPokemon.status = "fainted";
+    console.log(`${faintedPokemon.name} has fainted`);
+}
+
 function movePlayer(event){
     console.log(event)
     playerState.moveChar(event)
