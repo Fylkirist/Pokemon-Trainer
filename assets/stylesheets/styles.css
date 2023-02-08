@@ -9,6 +9,10 @@
     justify-content: center;
     align-items: center;
 }
+#playerCharSpriteContainer{
+    justify-self: center;
+    position:absolute;
+}
 
 #backgroundLayer{
     height: 1100px;
@@ -106,7 +110,7 @@
     grid-column: 2/2;
     grid-row: 1/3;
     display: flex;
-    justify-content: center;
+    justify-self: center;
     align-items: center;
     height:300px
 }
@@ -116,7 +120,7 @@
     grid-row: 2/2;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-self: center;
     align-items: center;
     border: solid black 2px;
     width: 200px;
@@ -164,4 +168,45 @@
 .battleMenuOption:hover{
     border: 2px solid black;
     border-radius: 10px;
+}
+
+#itemMenuContainer{
+    border: 2px solid black;
+    border-radius: 10px;
+    position:absolute;
+    height: 500px;
+    width: 160px;
+    bottom: 140px;
+    background: white;
+    right: 133px;
+    padding: 20px;
+}
+
+.itemMenuOption{
+    padding:5px;
+    margin: 5px;
+}
+
+.itemMenuOption:hover{
+    border: 2px solid black;
+    border-radius: 10px;
+}
+
+.emptyPartySlot{
+    background: grey;
+    border:solid black 1px
+}
+
+.partyMenuElement{
+    background: greenyellow;
+    border: solid black 1px
+}
+
+.partyMenuElement:hover{
+    background: rgb(197, 255, 110);
+}
+
+.partyMenuContainer{
+    background: white;
+
 }

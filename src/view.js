@@ -15,7 +15,7 @@ function renderPlayerModel(facing){
 }
 
 function drawGrid(mapGrid,pState){
-    document.getElementById("gameWindow").innerHTML=`<div id = "backgroundLayer"></div><div id="playerSpriteContainer">${renderPlayerModel(pState.position[2])}</div>`
+    document.getElementById("gameWindow").innerHTML=`<div id = "backgroundLayer"></div><div id="playerCharSpriteContainer">${renderPlayerModel(pState.position[2])}</div>`
     let buffer = ``
     for(row = pState.position[0]-11; row<pState.position[0]+11; row++){
         for(col = pState.position[1]-11; col<pState.position[1]+11; col++){
@@ -37,12 +37,13 @@ function drawGrid(mapGrid,pState){
 }
 
 function renderBattle(bState,pState){
+    let gWindow = document.getElementById("gameWindow")
 
     let enemyCurrentHealthBar = (bState.enemyParty[bState.enemyCurrentActive].stats.currentHealth / bState.enemyParty[bState.enemyCurrentActive].stats.maxHealth) * 100
 
     let playerCurrentHealthBar = (pState.party[bState.playerCurrentActive].stats.currentHealth / pState.party[bState.playerCurrentActive].stats.maxHealth) * 100
 
-    document.getElementById("gameWindow").innerHTML=`
+    gWindow.innerHTML=`
     <div id = "battleBackground">
         <div id = "enemyInfoContainer">
             <label>${bState.enemyParty[bState.enemyCurrentActive].name}</label>
@@ -74,36 +75,51 @@ function renderBattle(bState,pState){
         document.getElementById("menuHead").innerHTML=`
             <div onclick="openFightMenu()"class="battleMenuOption" id = "fightOption">Fight</div>
             <div onclick="openItemsMenu()"class="battleMenuOption" id = "itemsOption">Items</div>
-            <div onclick="openPartyMenu(false)" class="battleMenuOption" id = "partyOption">PKMN</div>
-            <div onclick="fleeBattle()" class="battleMenuOption" id = "fleeOption">Flee</div>`
+            <div onclick="openPartyMenu(true,false)" class="battleMenuOption" id = "partyOption">PKMN</div>
+            <div onclick="handleBattleLogic('flee',0)" class="battleMenuOption" id = "fleeOption">Flee</div>`
     }
     else if(bState.menu=="fight"){
         const infoBar = document.getElementById("infoBar")
         for(i=0;i<pState.party[bState.playerCurrentActive].moves.length;i++){
             infoBar.innerHTML+=`<div onclick="selectMove('${pState.party[bState.playerCurrentActive].moves[i]}')" class="battleMenuOption">${pState.party[bState.playerCurrentActive].moves[i]}</div>`
-            }
+        }
         infoBar.innerHTML+=`<div class="battleMenuOption" onclick="mainBattleMenu()">Back</div>`
     }
     else if(bState.menu=="items"){
-        for(i=0;i<pState.items.length;i++){
-            
+        let itemMenuContainer = document.createElement("div")
+        itemMenuContainer.id="itemMenuContainer"
+        for(let itemKey of Object.keys(pState.items)){
+            if (pState.items[itemKey]>0){
+                itemMenuContainer.innerHTML+=`<div class="itemMenuOption" onclick="selectItem('${itemKey}')">${itemKey} x${pState.items[itemKey]}</div>`
+            }
+        }
+        itemMenuContainer.innerHTML+=`<div class="itemMenuOption" onclick="mainBattleMenu()">Back</div>`
+        gWindow.appendChild(itemMenuContainer)
+    }
+}
+
+function renderBattlePartyMenu(pState,fainted){
+    const gameWindow = document.getElementById("gameWindow")
+    gameWindow.innerHTML=""
+    let partyMenuContainer= document.createElement("div")
+    partyMenuContainer.id="partyMenuContainer"
+    for(i=0;i<6;i++){
+        if (i<pState.party.length){
+            partyMenuContainer.innerHTML+=`<div onclick="handleBattleLogic('switch',${i})" class="partyMenuElement"><img src="${pState.party[i].sprite.towards}"/>${pState.party[i].name}<label>${pState.party[i].stats.currentHealth}/${pState.party[i].stats.maxHealth} hp</label></div>`
+        }
+        else{
+            partyMenuContainer.innerHTML+=`<div class="emptyPartySlot"></div>`
         }
     }
-}
-
-function renderBattlePartyMenu(bState){
-    const gameWindow = document.getElementById("gameWindow")
-    gameWindow.innerHTML=`<div id="partyMenuBG"></div>`
-    for(i=0;i<bState.playerParty.length;i++){
-        
+    if(!fainted){
+        partyMenuContainer.innerHTML+=`<div class="itemMenuOption" onclick="mainBattleMenu()">Back</div>`
     }
+    gameWindow.appendChild(partyMenuContainer)
 }
-
-
 
 function animateWalkCycle(pState,map){
     const background = document.getElementById("backgroundLayer");
-    document.getElementById("playerSpriteContainer").innerHTML=renderPlayerModel(pState.position[2]);
+    document.getElementById("playerCharSpriteContainer").innerHTML=renderPlayerModel(pState.position[2]);
     let direction;
 
     switch (pState.position[2]) {

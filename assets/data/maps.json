@@ -19,8 +19,18 @@
         [{"type":"grassTile","facing":"south","occupied":"","encounter":0.90},{"type":"grassTile","facing":"south","occupied":"","encounter":0.90},{"type":"grassTile","facing":"south","occupied":"","encounter":0.90},{"type":"grassTile","facing":"south","occupied":"","encounter":0.90},{"type":"grassTile","facing":"south","occupied":"","encounter":0.90},{"type":"grassTile","facing":"south","occupied":"","encounter":0.90},{"type":"grassTile","facing":"south","occupied":"","encounter":0.90},{"type":"grassTile","facing":"south","occupied":"","encounter":0.90},{"type":"grassTile","facing":"south","occupied":"","encounter":0.90}]
     ],"encounters":[{
         "name":"Pikachu",
-        "level":50,
+        "level":40,
         "moves":["Thunder","Thunderbolt","Slam","Thunder Shock"],
         "species":0
+    },{
+        "name":"Bulbasaur",
+        "level":40,
+        "moves":["Leaf Blade","Giga Drain","Solar Beam","Seed Bomb"],
+        "species":2
+    },{
+        "name":"Charmander",
+        "level":40,
+        "moves":["Flamethrower","Fire Blast","Ember","Inferno"],
+        "species":1
     }]}
 ]

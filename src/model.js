@@ -21,8 +21,27 @@ const typeRelationships = {
     "fairy": { weakTo: ["steel", "poison"], strongAgainst: ["fighting", "dragon", "dark"] },
     "electric":{weakTo:["ground","grass","dragon"],strongAgainst: ["flying","water"]}
   };
+
+const itemDict = {
+    "Potion":{effect:"restore",value:100},
+    "PokeBall":{effect:"catch",value:40}
+}
   
-var moveDict = {"Thunder":{type:"electric",power:120,category:"special",accuracy:80,effect:["paralyze",0.10]},"Thunderbolt":{type:"electric",power:80,category:"special",accuracy:100,effect:["paralyze",0.10]},"Slam":{type:"normal",power:80,category:"physical",accuracy:100,effect:["none",0]},"Thunder Shock":{type:"electric",power:60,category:"special",accuracy:500,effect:["paralyze",0.30]}}
+var moveDict = {
+    "Thunder":{type:"electric",power:120,category:"special",accuracy:80,effect:["paralyze",0.10]},
+    "Thunderbolt":{type:"electric",power:80,category:"special",accuracy:100,effect:["paralyze",0.10]},
+    "Slam":{type:"normal",power:80,category:"physical",accuracy:100,effect:["none",0]},
+    "Thunder Shock":{type:"electric",power:60,category:"special",accuracy:500,effect:["paralyze",0.30]},
+    "Leaf Blade":{type:"grass",power:90,category:"physical",accuracy:100,effect:["none",0]},
+    "Giga Drain":{type:"grass",power:75,category:"special",accuracy:100,effect:["heal",0.50]},
+    "Solar Beam":{type:"grass",power:120,category:"special",accuracy:100,effect:["none",0]},
+    "Seed Bomb":{type:"grass",power:80,category:"physical",accuracy:100,effect:["none",0]},
+    "Flamethrower":{type:"fire",power:90,category:"special",accuracy:100,effect:["burn",0.10]},
+    "Fire Blast":{type:"fire",power:110,category:"special",accuracy:85,effect:["burn",0.10]},
+    "Ember":{type:"fire",power:40,category:"special",accuracy:100,effect:["burn",0.10]},
+    "Inferno":{type:"fire",power:100,category:"special",accuracy:50,effect:["burn",0.30]}
+}
+
 var battleFlag = false
 var mapData;
 var pkmnData;
@@ -76,7 +95,7 @@ class battleState{
         this.turncount = 0;
         this.playerCurrentActive = 0;
         this.enemyCurrentActive = 0;
-        this.encounterType = properties.type
+        this.encounterType = properties.encounterType
         this.enemyParty = properties.enemyParty
         this.flags = properties.flags
         this.menu = "main"
@@ -91,8 +110,8 @@ class state{
         this.flags = properties.flags
         this.items = properties.items
     }
-    addToParty(properties){
-
+    addToParty(newPokemon){
+        this.party.push(newPokemon)
     }
     moveChar(direction){
         if(direction == "ArrowUp"){
